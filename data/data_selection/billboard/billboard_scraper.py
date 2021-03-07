@@ -16,7 +16,7 @@ def _handle_scraping(request_result):
 artist_array = []
 
 # Scrape charts from 2010 -> 2020
-for i in range(2010, 2021):
+for i in range(1970, 2021):
     # Append year
     website = 'https://en.wikipedia.org/wiki/Billboard_Year-End_Hot_100_singles_of_' + str(i)
 
