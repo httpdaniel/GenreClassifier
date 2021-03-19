@@ -4,7 +4,7 @@ import numpy as np
 import operator
 
 # Read in csv
-df = pd.read_csv('../data_selection/spotify/spotify.csv')
+df = pd.read_csv('spotify/spotify.csv')
 
 # Create empty genre column
 df['Genre'] = ''
@@ -65,5 +65,5 @@ df['Genre'].replace("UnknownGenre", np.nan, inplace=True, regex=True)
 df = df.dropna()
 
 # Save dataframe to csv
-df.to_csv('dataset.csv', index=False, encoding='utf-8')
+df.to_csv('../selected_dataset.csv', index=False, encoding='utf-8')
 
