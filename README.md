@@ -1,1 +1,3 @@
-GenreClassifier
+# Genre Classifier
+
+Music genre classification
