@@ -18,7 +18,7 @@ from sklearn.neighbors import KNeighborsClassifier
 # In[12]:
 
 
-data = pd.read_csv('dataset.csv')
+data = pd.read_csv('../data_selection/balance/dataset.csv')
 X = data.iloc[:,4].values.astype('U')
 for i in range(5545):
     X[i] = str.lower(X[i])
