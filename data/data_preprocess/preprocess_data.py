@@ -3,6 +3,7 @@ import nltk
 import re
 import string
 import pandas as pd
+import numpy as np
 from nltk.corpus import stopwords, wordnet
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
@@ -80,4 +81,9 @@ def process_text(text):
 
 # Preprocess song lyrics and replace
 df['Lyrics'] = df['Lyrics'].apply(process_text)
+
+# Remove all songs with no lyrics
+df['Lyrics'].replace("", np.nan, inplace=True, regex=True)
+df = df.dropna()
+
 df.to_csv('../preprocessed_dataset.csv', index=False, encoding='utf-8')
