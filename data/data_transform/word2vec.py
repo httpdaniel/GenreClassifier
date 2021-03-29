@@ -21,3 +21,8 @@ for i in range(5545):
    vec = model.wv.vectors 
    print(vec)
    
+"""
+if directly call google pretrained model:
+import gensim
+model = gensim.models.Word2Vec.load_word2vec_format('./GoogleNews-vectors-negative300.bin', binary=True)# model is too large to upload
+"""
