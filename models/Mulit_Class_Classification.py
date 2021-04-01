@@ -127,38 +127,38 @@ X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
 # In[36]:
 
 
-from sklearn.model_selection import GridSearchCV
+#from sklearn.model_selection import GridSearchCV
 
 
 # In[ ]:
 
 
-parameters = {'n_estimators' : [int((len(X)+5)/10*i) for i in range(1,10)] }
-rfc = RandomForestClassifier()
+#parameters = {'n_estimators' : [int((len(X)+5)/10*i) for i in range(1,10)] }
+#rfc = RandomForestClassifier()
 
-CV_rfc = GridSearchCV(estimator=rfc, param_grid=parameters, cv= 10)
-CV_rfc.fit(X_train_tfidf, y_train)
+#CV_rfc = GridSearchCV(estimator=rfc, param_grid=parameters, cv= 10)
+#CV_rfc.fit(X_train_tfidf, y_train)
 
 
 # In[40]:
 
 
-parameters = {'C' : [1e-5 , 1e-3 , 1e-1 , 1 , 10 , 100 , 1000] }
-lin_svc = LinearSVC()
+#parameters = {'C' : [1e-5 , 1e-3 , 1e-1 , 1 , 10 , 100 , 1000] }
+#lin_svc = LinearSVC()
 
-CV_lin_svc = GridSearchCV(estimator=lin_svc, param_grid=parameters, cv= 10)
-CV_lin_svc.fit(X_train_tfidf, y_train)
+#CV_lin_svc = GridSearchCV(estimator=lin_svc, param_grid=parameters, cv= 10)
+#CV_lin_svc.fit(X_train_tfidf, y_train)
 
 
 # In[58]:
 
 
-parameters = {'C' : [1e-5 , 1e-3 , 1e-1 , 1 , 10 , 100 , 1000] }
-log_reg = LogisticRegression()
+#parameters = {'C' : [1e-5 , 1e-3 , 1e-1 , 1 , 10 , 100 , 1000] }
+#log_reg = LogisticRegression()
 
-CV_log_reg = GridSearchCV(estimator=log_reg, param_grid=parameters, cv= 10)
-CV_log_reg.fit(X_train_tfidf, y_train)
-print(CV_log_reg.best_estimator_)
+#CV_log_reg = GridSearchCV(estimator=log_reg, param_grid=parameters, cv= 10)
+#CV_log_reg.fit(X_train_tfidf, y_train)
+#print(CV_log_reg.best_estimator_)
 
 
 # In[12]:
