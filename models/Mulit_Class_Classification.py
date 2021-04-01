@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[92]:
+# In[1]:
 
 
 import pandas as pd
@@ -97,7 +97,7 @@ labels = df2.Genre_ID
 features.shape
 
 
-# In[79]:
+# In[10]:
 
 
 N = 2
@@ -112,7 +112,7 @@ for genre , genre_id in zip(list(df2['Genre'].drop_duplicates()) , list(df2['Gen
     print("  . Most correlated bigrams:\n. {}".format('\n. '.join(bigrams[-N:])))
 
 
-# In[82]:
+# In[11]:
 
 
 X_train, X_test, y_train, y_test = train_test_split(df2['Lyrics'], df2['Genre'], random_state = 0)
@@ -120,23 +120,55 @@ count_vect = CountVectorizer()
 X_train_counts = count_vect.fit_transform(X_train)
 tfidf_transformer = TfidfTransformer()
 X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
-clf = MultinomialNB().fit(X_train_tfidf, y_train)
 
 
-# In[89]:
+# ## Cross Val
+
+# In[36]:
 
 
-clf.predict(count_vect.transform([X[15]]))
+from sklearn.model_selection import GridSearchCV
 
 
-# In[93]:
+# In[ ]:
+
+
+parameters = {'n_estimators' : [int((len(X)+5)/10*i) for i in range(1,10)] }
+rfc = RandomForestClassifier()
+
+CV_rfc = GridSearchCV(estimator=rfc, param_grid=parameters, cv= 10)
+CV_rfc.fit(X_train_tfidf, y_train)
+
+
+# In[40]:
+
+
+parameters = {'C' : [1e-5 , 1e-3 , 1e-1 , 1 , 10 , 100 , 1000] }
+lin_svc = LinearSVC()
+
+CV_lin_svc = GridSearchCV(estimator=lin_svc, param_grid=parameters, cv= 10)
+CV_lin_svc.fit(X_train_tfidf, y_train)
+
+
+# In[58]:
+
+
+parameters = {'C' : [1e-5 , 1e-3 , 1e-1 , 1 , 10 , 100 , 1000] }
+log_reg = LogisticRegression()
+
+CV_log_reg = GridSearchCV(estimator=log_reg, param_grid=parameters, cv= 10)
+CV_log_reg.fit(X_train_tfidf, y_train)
+print(CV_log_reg.best_estimator_)
+
+
+# In[12]:
 
 
 models = [
     RandomForestClassifier(n_estimators=200, max_depth=3, random_state=0),
-    LinearSVC(),
+    LinearSVC(C=0.1),
     MultinomialNB(),
-    LogisticRegression(random_state=0),
+    LogisticRegression(C=1),
 ]
 CV = 5
 cv_df = pd.DataFrame(index=range(CV * len(models)))
@@ -154,16 +186,16 @@ sns.stripplot(x='model_name', y='accuracy', data=cv_df,
 plt.show()
 
 
-# In[94]:
+# In[13]:
 
 
 cv_df.groupby('model_name').accuracy.mean()
 
 
-# In[98]:
+# In[14]:
 
 
-model = LinearSVC()
+model = LogisticRegression()
 X_train, X_test, y_train, y_test, indices_train, indices_test = train_test_split(features, labels, df.index, test_size=0.33, random_state=0)
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
@@ -177,9 +209,108 @@ plt.xlabel('Predicted')
 plt.show()
 
 
-# In[96]:
+# In[58]:
+
+
+importance = sorted(model.coef_[0])[-10:]
+label_rock = []
+for item in importance : 
+    idx = np.where(model.coef_[0] == item)
+    label_rock.append(feature_names[idx][0])
+plt.bar([x for x in range(len(importance))], importance)
+plt.xticks([x for x in range(len(importance))] , label_rock, rotation='vertical')
+plt.title('Rap Feature Importance')
+plt.show()
+
+
+# In[59]:
+
+
+importance = sorted(model.coef_[1])[-10:]
+label_rock = []
+for item in importance : 
+    idx = np.where(model.coef_[1] == item)
+    label_rock.append(feature_names[idx][0])
+plt.bar([x for x in range(len(importance))], importance)
+plt.xticks([x for x in range(len(importance))] , label_rock, rotation='vertical')
+plt.title('R&B Feature Importance')
+plt.show()
+
+
+# In[60]:
+
+
+importance = sorted(model.coef_[2])[-10:]
+label_rock = []
+for item in importance : 
+    idx = np.where(model.coef_[2] == item)
+    label_rock.append(feature_names[idx][0])
+plt.bar([x for x in range(len(importance))], importance)
+plt.xticks([x for x in range(len(importance))] , label_rock, rotation='vertical')
+plt.title('Blues Feature Importance')
+plt.show()
+
+
+# In[61]:
+
+
+importance = sorted(model.coef_[3])[-10:]
+label_rock = []
+for item in importance : 
+    idx = np.where(model.coef_[3] == item)
+    label_rock.append(feature_names[idx][0])
+plt.bar([x for x in range(len(importance))], importance)
+plt.xticks([x for x in range(len(importance))] , label_rock, rotation='vertical')
+plt.title('Country Feature Importance')
+plt.show()
+
+
+# In[62]:
+
+
+importance = sorted(model.coef_[4])[-10:]
+label_rock = []
+for item in importance : 
+    idx = np.where(model.coef_[4] == item)
+    label_rock.append(feature_names[idx][0])
+plt.bar([x for x in range(len(importance))], importance)
+plt.xticks([x for x in range(len(importance))] , label_rock, rotation='vertical')
+plt.title('EDM Feature Importance')
+plt.show()
+
+
+# In[63]:
+
+
+importance = sorted(model.coef_[5])[-10:]
+label_rock = []
+for item in importance : 
+    idx = np.where(model.coef_[5] == item)
+    label_rock.append(feature_names[idx][0])
+plt.bar([x for x in range(len(importance))], importance)
+plt.xticks([x for x in range(len(importance))] , label_rock, rotation='vertical')
+plt.title('Rap Feature Importance')
+plt.show()
+
+
+# In[64]:
+
+
+importance = sorted(model.coef_[6])[-10:]
+label_rock = []
+for item in importance : 
+    idx = np.where(model.coef_[6] == item)
+    label_rock.append(feature_names[idx][0])
+plt.bar([x for x in range(len(importance))], importance)
+plt.xticks([x for x in range(len(importance))] , label_rock, rotation='vertical')
+plt.title('Pop Feature Importance')
+plt.show()
+
+
+# In[29]:
 
 
 from sklearn import metrics
-print(metrics.classification_report(y_test, y_pred, target_names=df['Genre'].unique()))
+clf_report = metrics.classification_report(y_test, y_pred, target_names=df['Genre'].unique() , output_dict=True)
+sns.heatmap(pd.DataFrame(clf_report).iloc[:-1, :].T, annot=True)
 
