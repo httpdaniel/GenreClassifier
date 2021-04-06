@@ -72,6 +72,29 @@ fig_dist.update_layout(title="Lyric length by genre",
 
 fig_dist.show()
 
+# Plot occurrences of profanity
+prof_count = []
+
+for i in df.Genre.unique():
+    prof_count.append(pd.DataFrame(df[df.Genre == i]['Profanity_Count']))
+
+prof_counts = pd.concat([i for i in prof_count], axis=1)
+prof_counts.columns = df.Genre.unique()
+
+fig_dist = prof_counts.plot.box(template='ggplot2')
+
+margin_param = dict(l=25, r=25, b=50, t=50, pad=0)
+
+fig_dist.update_layout(title="Profanity count by genre",
+                       margin=margin_param,
+                       width=900,
+                       height=500,
+                       xaxis=dict(title_text='Genre', title_font=dict(size=10), tickfont=dict(size=10)),
+                       yaxis=dict(title_text='Number of swear words', title_font=dict(size=10),
+                                  tickfont=dict(size=10)))
+
+fig_dist.show()
+
 
 # Most common words
 def get_most_common(text):
