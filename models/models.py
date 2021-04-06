@@ -125,7 +125,7 @@ def evaluate(test, pred, feature_map, total_time, modelname):
 
     # Plot confusion matrix
     conf_mat = confusion_matrix(actual, predicted)
-    fig, ax = plt.subplots(figsize=(10, 10))
+    fig, ax = plt.subplots(figsize=(10, 10), dpi=200)
     ax.set_title(f"{modelname} - Confusion Matrix\n")
     sns.heatmap(conf_mat, annot=True, fmt='d',
                 xticklabels=list(feature_map), yticklabels=list(feature_map))
@@ -142,14 +142,14 @@ def evaluate(test, pred, feature_map, total_time, modelname):
            }
 
     res_df = pd.DataFrame([res], columns=['Accuracy', 'Recall', 'Precision', 'F1', 'Time Taken'])
-    res_df.to_csv(f'../results/{modelname}_results.csv', index=False, encoding='utf-8')
+    res_df.to_csv(f'../results/{modelname}/{modelname}_Results.csv', index=False, encoding='utf-8')
 
 
 X_train, X_test, y_train, y_test, mapping = get_data()
 
 models = [
     RandomForestClassifier(n_estimators=200, max_depth=3, random_state=42),
-    LogisticRegression(random_state=42),
+    LogisticRegression(max_iter=10000, random_state=42),
     LinearSVC(),
     DummyClassifier(strategy="most_frequent"),
 ]
@@ -173,5 +173,7 @@ for model in models:
 
 cv_df = pd.DataFrame(entries, columns=['model_name', 'fold_idx', 'accuracy'])
 sns.boxplot(x='model_name', y='accuracy', data=cv_df)
-sns.stripplot(x='model_name', y='accuracy', data=cv_df, size=8, jitter=True, edgecolor="gray", linewidth=2)
+sns.stripplot(x='model_name', y='accuracy', data=cv_df, size=14, jitter=True, edgecolor="gray", linewidth=2)
 plt.show()
+
+print(entries)
